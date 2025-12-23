@@ -28,7 +28,14 @@ pip install reqs.txt
 ## Models of HuggingFace HUB
 
 *   [Qwen3-8B AWQ](https://huggingface.co/akon1te/qwen3-8b-awq) - Best model of Stage1
-*   [Qwen3-8B-AWQ-SVD](https://huggingface.co/akon1te/qwen3-8b-awq-mmlu-lora) - Best adapter from Stage2
+*   [Qwen3-8B-AWQ-Lora](https://huggingface.co/akon1te/qwen3-8b-awq-mmlu-lora) - Best adapter from Stage2
+*   [Qwen3-8B AWQ SVD_lm_head](https://huggingface.co/akon1te/qwen3-8b-awq_lm-head-svd) - SVD of lm_head model
+
+
+### SVD model loading
+
+> weights = hf_hub_download(repo_id="akon1te/qwen3-8b-awq_lm-head-svd", filename="model.pt")\
+base_model = torch.load(weights, weights_only=False)
 
 
 ## Results 
