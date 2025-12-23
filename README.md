@@ -31,8 +31,7 @@ pip install reqs.txt
 *   [Qwen3-8B-AWQ-SVD](https://huggingface.co/akon1te/qwen3-8b-awq-mmlu-lora) - Best adapter from Stage2
 
 
-## Usage
-
+## Results 
 
 ### Stage 0: Baseline eval
 
@@ -46,10 +45,16 @@ VRAM consuming: **17360 MiB**
 This step converts the generic FP16 model to INT4, using the MMLU validation set to calibrate weights.
 
 *   *Default settings: 4-bit, group_size=128, 128 calibration samples.*
+*   Accuracy on dev MMLU (10 samples per category): **0.7298**
+*   VRAM consuming: **7406 MiB** 
+
+
 
 > **Results:** \
-Accuracy on dev MMLU (10 samples per category): **0.7298** \
-VRAM consuming: **7406 MiB** 
+**Compression Ratio:** $17360 / 7406 \approx 2.34$\
+**Performance Drop:** 
+$(0.7439 − 0.7298) / 0.7439 \approx 0.019$\
+**Score:** $2.34 / (1 + 0.019) = 2.30$
 
 
 ---
@@ -58,12 +63,19 @@ VRAM consuming: **7406 MiB**
 
 This step takes the AWQ model, dequantizes the `lm_head` layer, performs SVD, and replaces the layer with two smaller low-rank matrices.
 
+
+*   Accuracy on dev MMLU (10 samples per category): **0.7018** \
+*   VRAM consuming: **6838MiB**
+
+
 > **Results:** \
-Accuracy on dev MMLU (10 samples per category): **0.7018** \
-VRAM consuming: **6838MiB**
+**Compression Ratio:** $17360 / 6838 \approx \mathbf{2.54}$ \
+**Performance Drop:** 
+$(0.7439−0.7018)/0.7439 \approx 0.057$\
+**Score:** $2.54 / (1 + 0.057) = 2.54 / 1.057 \approx \mathbf{2.40}$
 
 
-### Stage 2: Train LORA
+### Stage 2.1: Train LORA on Qwen3-AWQ
 
 Train on Aluxuary part on MMLU:
 - 10000 samples
@@ -71,4 +83,10 @@ Train on Aluxuary part on MMLU:
 
 > **Results:** \
 Accuracy on dev MMLU (10 samples per category): **0.7368** \
-VRAM consuming: **7730 MiB**
+
+
+## Немного выводов
+
+На самом деле для первого этапа судя по самоподсчитанным скорам надо было брать модель с SVD, но из-за "фриза" на работе, я не довел до ума тренировку с SVD. 
+Там был около нулевой прирост на валидации и с Lora, и Full-FT новой головы, поэтому за базу считаю просто AWQ модель.
+
