@@ -40,6 +40,8 @@ base_model = torch.load(weights, weights_only=False)
 
 ## Results 
 
+**VRAM consuming брали пиковый через nvidia-smi**
+
 ### Stage 0: Baseline eval
 
 > **Results:** \
