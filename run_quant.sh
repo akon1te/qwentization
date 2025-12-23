@@ -15,7 +15,7 @@ echo "Target Path:  $OUTPUT_PATH"
 echo "=========================================="
 
 
-python quantize_mmlu.py \
+python src/quantize_mmlu.py \
     --model_path "$MODEL_PATH" \
     --output_path "$OUTPUT_PATH" \
     --w_bit 4 \

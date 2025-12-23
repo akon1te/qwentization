@@ -17,7 +17,7 @@ echo "Rank Ratio:   $RANK_RATIO"
 echo "=========================================="
 
 
-python apply_svd.py \
+python src/apply_svd.py \
     --model_path "$MODEL_PATH" \
     --output_path "$OUTPUT_PATH" \
     --rank_ratio "$RANK_RATIO"

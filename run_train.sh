@@ -14,7 +14,7 @@ echo "Base Model: $MODEL_PATH"
 echo "Output Dir: $OUTPUT_DIR"
 echo "=========================================="
 
-python train_lora.py \
+python src/train_lora.py \
     --model_path "$MODEL_PATH" \
     --output_dir "$OUTPUT_DIR" \
     --dataset_limit 10000 \

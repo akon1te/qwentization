@@ -7,7 +7,7 @@ Stage1:
 
 Stage2:
 
-1. **PEFT trainig:** Training of AWQ-quantized via LORA on MMLU aluxuairy dataset part
+1. **LORA trainig:** Training of AWQ-quantized via LORA on MMLU aluxuairy dataset part
 
 ## Installation
 
@@ -27,30 +27,29 @@ pip install reqs.txt
 
 ## Models of HuggingFace HUB
 
-*   `Qwen3-8B-AWQ` - Best model of Stage1
-*   `Qwen3-8B-AWQ-SVD ` - Second model from Stage1
+*   [Qwen3-8B AWQ](https://huggingface.co/akon1te/qwen3-8b-awq) - Best model of Stage1
+*   [Qwen3-8B-AWQ-SVD](https://huggingface.co/akon1te/qwen3-8b-awq-mmlu-lora) - Best adapter from Stage2
 
 
 ## Usage
+
+
+### Stage 0: Baseline eval
+
+> **Results:** \
+Accuracy on dev MMLU (10 samples per category): **0.7439** \
+VRAM consuming: **17360 MiB** 
+
 
 ### Stage 1: AWQ Quantization (MMLU)
 
 This step converts the generic FP16 model to INT4, using the MMLU validation set to calibrate weights.
 
-**Syntax:**
-```bash
-./run_quant.sh <SOURCE_MODEL_ID> <OUTPUT_DIR>
-```
-
-**Example:**
-```bash
-./run_quant.sh Qwen/Qwen3-8B ./models/Qwen3-8B-AWQ-MMLU
-```
 *   *Default settings: 4-bit, group_size=128, 128 calibration samples.*
 
-> **Note:** \
-Accuracy on dev MMLU (10 samples per category): **0.7368** \
-VRAM consuming: **3280.76 MB**
+> **Results:** \
+Accuracy on dev MMLU (10 samples per category): **0.7298** \
+VRAM consuming: **7406 MiB** 
 
 
 ---
@@ -59,18 +58,17 @@ VRAM consuming: **3280.76 MB**
 
 This step takes the AWQ model, dequantizes the `lm_head` layer, performs SVD, and replaces the layer with two smaller low-rank matrices.
 
-**Syntax:**
-```bash
-./run_svd.sh <AWQ_MODEL_DIR> <OUTPUT_DIR> [RANK_RATIO]
-```
+> **Results:** \
+Accuracy on dev MMLU (10 samples per category): **0.7018** \
+VRAM consuming: **6838MiB**
 
-**Example:**
-```bash
-# Reduces the head rank to 80% of original
-./run_svd.sh ./models/Qwen3-8B-AWQ-MMLU ./models/Qwen3-8B-AWQ-SVD 0.8
-```
 
-> **Note:** \
-Accuracy on dev MMLU (10 samples per category): **0.6982** \
-VRAM consuming: **5787.29 MB**
+### Stage 2: Train LORA
 
+Train on Aluxuary part on MMLU:
+- 10000 samples
+- Lr= 1e-5
+
+> **Results:** \
+Accuracy on dev MMLU (10 samples per category): **0.7368** \
+VRAM consuming: **7730 MiB**

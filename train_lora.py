@@ -72,7 +72,7 @@ def main():
     dataset = load_dataset("cais/mmlu", "all", split="auxiliary_train")
 
     dataset = dataset.select(range(min(len(dataset), args.dataset_limit)))
-        tokenized_dataset = dataset.map(format_and_tokenize, remove_columns=dataset.column_names)
+    tokenized_dataset = dataset.map(format_and_tokenize, remove_columns=dataset.column_names)
 
 
     model = AutoModelForCausalLM.from_pretrained(
